@@ -22,18 +22,26 @@ class MainActivity : AppCompatActivity() {
 
         tvResponse = findViewById(R.id.tvResponse)
         btnPost = findViewById(R.id.btnPost)
-        val row0 = listOf<Int>(1,2,3)
-        val row1 = listOf<Int>(6,2,3)
-        val row2 = listOf<Int>(7,2,3)
-        val puzzle = listOf<List<Int>>(row0, row1, row2)
+        val row0 = listOf<Int>(1,3,0,6,0,0,0,8,0)
+        val row1 = listOf<Int>(0,4,6,0,3,0,0,0,0)
+        val row2 = listOf<Int>(0,2,0,5,0,0,0,0,0)
+        val row3 = listOf<Int>(0,0,0,2,0,0,1,0,6)
+        val row4 = listOf<Int>(0,9,0,0,5,7,0,0,0)
+        val row5 = listOf<Int>(8,0,0,0,0,0,0,4,5)
+        val row6 = listOf<Int>(0,0,0,0,0,0,3,7,0)
+        val row7 = listOf<Int>(0,0,0,0,6,3,4,0,0)
+        val row8 = listOf<Int>(0,0,0,0,0,0,5,0,1)
+
+        val puzzle = listOf<List<Int>>(row0, row1, row2, row3, row4, row5, row6, row7, row8)
 
         val board = Board(puzzle)
+        println(board)
 
         lifecycleScope.launchWhenCreated {
             //tvResponse.text = board.toString()
 
             val response = try {
-                RetrofitInstance.api.getAccounts()
+                RetrofitInstance.api.postBoard(board)
             } catch(e: IOException){
                 Log.e("[POST][SOLVE]", "IOException: ${e.message}")
                 return@launchWhenCreated
