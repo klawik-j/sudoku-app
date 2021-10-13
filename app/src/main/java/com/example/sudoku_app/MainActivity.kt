@@ -1,12 +1,13 @@
 package com.example.sudoku_app
 
-import SudokuApi
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import retrofit2.HttpException
+import retrofit2.Response
 import retrofit2.Retrofit
 import java.io.IOException
 import java.lang.Exception
@@ -28,24 +29,25 @@ class MainActivity : AppCompatActivity() {
 
         val board = Board(puzzle)
 
-        btnPost.setOnClickListener {
+        lifecycleScope.launchWhenCreated {
             //tvResponse.text = board.toString()
-            val retrofit = Retrofit.Builder()
-                .baseUrl("http://localhost:8080/")
-                .build()
-            val service = retrofit.create(SudokuApi::class.java)
 
             val response = try {
-                service.getAccounts()
+                RetrofitInstance.api.getAccounts()
             } catch(e: IOException){
-                Log.e("[POST][SOLVE]", "IOException")
+                Log.e("[POST][SOLVE]", "IOException: ${e.message}")
+                return@launchWhenCreated
             } catch(e: HttpException){
-                Log.e("[POST][SOLVE]", "HttpException")
+                Log.e("[POST][SOLVE]", "HttpException: ${e.message}")
+                return@launchWhenCreated
             } catch(e: Exception){
                 Log.e("[POST][SOLVE]", "Exception: ${e.message}")
+                return@launchWhenCreated
             }
 
             println(response)
+            println(response.body())
+
         }
     }
 
