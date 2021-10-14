@@ -28,4 +28,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/btnGoToSolveActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="solve view"
+        tools:layout_editor_absoluteX="140dp"
+        tools:layout_editor_absoluteY="261dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
