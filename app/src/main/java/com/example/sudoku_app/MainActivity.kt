@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -20,6 +21,7 @@ import java.lang.Exception
 class MainActivity : AppCompatActivity() {
     private lateinit var tvResponse: TextView
     private lateinit var btnGoToSolveActivity: Button
+    private lateinit var btnPost: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +29,8 @@ class MainActivity : AppCompatActivity() {
 
         tvResponse = findViewById(R.id.tvResponse)
         btnGoToSolveActivity = findViewById(R.id.btnGoToSolveActivity)
+        btnPost = findViewById(R.id.btnPost)
+
 
         btnGoToSolveActivity.setOnClickListener {
             Intent(this, SolveActivity::class.java).also {

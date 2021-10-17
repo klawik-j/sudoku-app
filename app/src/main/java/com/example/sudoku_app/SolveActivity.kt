@@ -2,9 +2,13 @@ package com.example.sudoku_app
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.core.view.isVisible
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -15,6 +19,8 @@ import java.lang.Exception
 class SolveActivity : AppCompatActivity() {
 
     private lateinit var btnSolve: Button
+    private lateinit var btnClear: Button
+    private lateinit var pbSolve: ProgressBar
 
     private lateinit var et_cell_A1: EditText
     private lateinit var et_cell_A2: EditText
@@ -112,6 +118,8 @@ class SolveActivity : AppCompatActivity() {
 
 
         btnSolve = findViewById(R.id.btnSolve)
+        btnClear = findViewById(R.id.btnClear)
+        pbSolve = findViewById(R.id.pbSolve)
 
         et_cell_A1 = findViewById(R.id.et_cell_A1)
         et_cell_A2 = findViewById(R.id.et_cell_A2)
@@ -203,163 +211,112 @@ class SolveActivity : AppCompatActivity() {
         et_cell_I8 = findViewById(R.id.et_cell_I8)
         et_cell_I9 = findViewById(R.id.et_cell_I9)
 
-        /*val row0 = listOf<Int>(1,3,0,6,0,0,0,8,0)
-        val row1 = listOf<Int>(0,4,6,0,3,0,0,0,0)
-        val row2 = listOf<Int>(0,2,0,5,0,0,0,0,0)
-        val row3 = listOf<Int>(0,0,0,2,0,0,1,0,6)
-        val row4 = listOf<Int>(0,9,0,0,5,7,0,0,0)
-        val row5 = listOf<Int>(8,0,0,0,0,0,0,4,5)
-        val row6 = listOf<Int>(0,0,0,0,0,0,3,7,0)
-        val row7 = listOf<Int>(0,0,0,0,6,3,4,0,0)
-        val row8 = listOf<Int>(0,0,0,0,0,0,5,0,1)*/
-
-        /*al row0 = listOf<Int>(0,0,0,0,0,0,0,0,0)
-        val row1 = listOf<Int>(0,0,0,0,0,0,0,0,0)
-        val row2 = listOf<Int>(0,0,0,0,0,0,0,0,0)
-        val row3 = listOf<Int>(0,0,0,0,0,0,0,0,0)
-        val row4 = listOf<Int>(0,0,0,0,0,0,0,0,0)
-        val row5 = listOf<Int>(0,0,0,0,0,0,0,0,0)
-        val row6 = listOf<Int>(0,0,0,0,0,0,0,0,0)
-        val row7 = listOf<Int>(0,0,0,0,0,0,0,0,0)
-        val row8 = listOf<Int>(0,0,0,0,0,0,0,0,0)*/
-
-        //val puzzle = listOf<List<Int>>(row0, row1, row2, row3, row4, row5, row6, row7, row8)
-
-        //val board = Board(puzzle)
-        //println(board)
-
         btnSolve.setOnClickListener {
-            /*val puzzle = listOf<List<Int>>(
+            val puzzle = listOf<List<Int>>(
                 listOf<Int>(
-                    et_cell_A1.text.toString().toInt(),
-                    et_cell_A2.text.toString().toInt(),
-                    et_cell_A3.text.toString().toInt(),
-                    et_cell_A4.text.toString().toInt(),
-                    et_cell_A5.text.toString().toInt(),
-                    et_cell_A6.text.toString().toInt(),
-                    et_cell_A7.text.toString().toInt(),
-                    et_cell_A8.text.toString().toInt(),
-                    et_cell_A9.text.toString().toInt()
+                    if (et_cell_A1.text.isNotBlank()) et_cell_A1.text.toString().toInt() else 0,
+                    if (et_cell_A2.text.isNotBlank()) et_cell_A2.text.toString().toInt() else 0,
+                    if (et_cell_A3.text.isNotBlank()) et_cell_A3.text.toString().toInt() else 0,
+                    if (et_cell_A4.text.isNotBlank()) et_cell_A4.text.toString().toInt() else 0,
+                    if (et_cell_A5.text.isNotBlank()) et_cell_A5.text.toString().toInt() else 0,
+                    if (et_cell_A6.text.isNotBlank()) et_cell_A6.text.toString().toInt() else 0,
+                    if (et_cell_A7.text.isNotBlank()) et_cell_A7.text.toString().toInt() else 0,
+                    if (et_cell_A8.text.isNotBlank()) et_cell_A8.text.toString().toInt() else 0,
+                    if (et_cell_A9.text.isNotBlank()) et_cell_A9.text.toString().toInt() else 0
                 ),
                 listOf<Int>(
-                    et_cell_B1.text.toString().toInt(),
-                    et_cell_B2.text.toString().toInt(),
-                    et_cell_B3.text.toString().toInt(),
-                    et_cell_B4.text.toString().toInt(),
-                    et_cell_B5.text.toString().toInt(),
-                    et_cell_B6.text.toString().toInt(),
-                    et_cell_B7.text.toString().toInt(),
-                    et_cell_B8.text.toString().toInt(),
-                    et_cell_B9.text.toString().toInt()
+                    if (et_cell_B1.text.isNotBlank()) et_cell_B1.text.toString().toInt() else 0,
+                    if (et_cell_B2.text.isNotBlank()) et_cell_B2.text.toString().toInt() else 0,
+                    if (et_cell_B3.text.isNotBlank()) et_cell_B3.text.toString().toInt() else 0,
+                    if (et_cell_B4.text.isNotBlank()) et_cell_B4.text.toString().toInt() else 0,
+                    if (et_cell_B5.text.isNotBlank()) et_cell_B5.text.toString().toInt() else 0,
+                    if (et_cell_B6.text.isNotBlank()) et_cell_B6.text.toString().toInt() else 0,
+                    if (et_cell_B7.text.isNotBlank()) et_cell_B7.text.toString().toInt() else 0,
+                    if (et_cell_B8.text.isNotBlank()) et_cell_B8.text.toString().toInt() else 0,
+                    if (et_cell_B9.text.isNotBlank()) et_cell_B9.text.toString().toInt() else 0
                 ),
                 listOf<Int>(
-                    et_cell_C1.text.toString().toInt(),
-                    et_cell_C2.text.toString().toInt(),
-                    et_cell_C3.text.toString().toInt(),
-                    et_cell_C4.text.toString().toInt(),
-                    et_cell_C5.text.toString().toInt(),
-                    et_cell_C6.text.toString().toInt(),
-                    et_cell_C7.text.toString().toInt(),
-                    et_cell_C8.text.toString().toInt(),
-                    et_cell_C9.text.toString().toInt()
+                    if (et_cell_C1.text.isNotBlank()) et_cell_C1.text.toString().toInt() else 0,
+                    if (et_cell_C2.text.isNotBlank()) et_cell_C2.text.toString().toInt() else 0,
+                    if (et_cell_C3.text.isNotBlank()) et_cell_C3.text.toString().toInt() else 0,
+                    if (et_cell_C4.text.isNotBlank()) et_cell_C4.text.toString().toInt() else 0,
+                    if (et_cell_C5.text.isNotBlank()) et_cell_C5.text.toString().toInt() else 0,
+                    if (et_cell_C6.text.isNotBlank()) et_cell_C6.text.toString().toInt() else 0,
+                    if (et_cell_C7.text.isNotBlank()) et_cell_C7.text.toString().toInt() else 0,
+                    if (et_cell_C8.text.isNotBlank()) et_cell_C8.text.toString().toInt() else 0,
+                    if (et_cell_C9.text.isNotBlank()) et_cell_C9.text.toString().toInt() else 0
                 ),
                 listOf<Int>(
-                    et_cell_D1.text.toString().toInt(),
-                    et_cell_D2.text.toString().toInt(),
-                    et_cell_D3.text.toString().toInt(),
-                    et_cell_D4.text.toString().toInt(),
-                    et_cell_D5.text.toString().toInt(),
-                    et_cell_D6.text.toString().toInt(),
-                    et_cell_D7.text.toString().toInt(),
-                    et_cell_D8.text.toString().toInt(),
-                    et_cell_D9.text.toString().toInt()
+                    if (et_cell_D1.text.isNotBlank())et_cell_D1.text.toString().toInt() else 0,
+                    if (et_cell_D2.text.isNotBlank())et_cell_D2.text.toString().toInt() else 0,
+                    if (et_cell_D3.text.isNotBlank())et_cell_D3.text.toString().toInt() else 0,
+                    if (et_cell_D4.text.isNotBlank())et_cell_D4.text.toString().toInt() else 0,
+                    if (et_cell_D5.text.isNotBlank())et_cell_D5.text.toString().toInt() else 0,
+                    if (et_cell_D6.text.isNotBlank())et_cell_D6.text.toString().toInt() else 0,
+                    if (et_cell_D7.text.isNotBlank())et_cell_D7.text.toString().toInt() else 0,
+                    if (et_cell_D8.text.isNotBlank())et_cell_D8.text.toString().toInt() else 0,
+                    if (et_cell_D9.text.isNotBlank())et_cell_D9.text.toString().toInt() else 0
                 ),
                 listOf<Int>(
-                    et_cell_E1.text.toString().toInt(),
-                    et_cell_E2.text.toString().toInt(),
-                    et_cell_E3.text.toString().toInt(),
-                    et_cell_E4.text.toString().toInt(),
-                    et_cell_E5.text.toString().toInt(),
-                    et_cell_E6.text.toString().toInt(),
-                    et_cell_E7.text.toString().toInt(),
-                    et_cell_E8.text.toString().toInt(),
-                    et_cell_E9.text.toString().toInt()
+                    if (et_cell_E1.text.isNotBlank()) et_cell_E1.text.toString().toInt() else 0,
+                    if (et_cell_E2.text.isNotBlank()) et_cell_E2.text.toString().toInt() else 0,
+                    if (et_cell_E3.text.isNotBlank()) et_cell_E3.text.toString().toInt() else 0,
+                    if (et_cell_E4.text.isNotBlank()) et_cell_E4.text.toString().toInt() else 0,
+                    if (et_cell_E5.text.isNotBlank()) et_cell_E5.text.toString().toInt() else 0,
+                    if (et_cell_E6.text.isNotBlank()) et_cell_E6.text.toString().toInt() else 0,
+                    if (et_cell_E7.text.isNotBlank()) et_cell_E7.text.toString().toInt() else 0,
+                    if (et_cell_E8.text.isNotBlank()) et_cell_E8.text.toString().toInt() else 0,
+                    if (et_cell_E9.text.isNotBlank()) et_cell_E9.text.toString().toInt() else 0
                 ),
                 listOf<Int>(
-                    et_cell_F1.text.toString().toInt(),
-                    et_cell_F2.text.toString().toInt(),
-                    et_cell_F3.text.toString().toInt(),
-                    et_cell_F4.text.toString().toInt(),
-                    et_cell_F5.text.toString().toInt(),
-                    et_cell_F6.text.toString().toInt(),
-                    et_cell_F7.text.toString().toInt(),
-                    et_cell_F8.text.toString().toInt(),
-                    et_cell_F9.text.toString().toInt()
+                    if (et_cell_F1.text.isNotBlank()) et_cell_F1.text.toString().toInt() else 0,
+                    if (et_cell_F2.text.isNotBlank()) et_cell_F2.text.toString().toInt() else 0,
+                    if (et_cell_F3.text.isNotBlank()) et_cell_F3.text.toString().toInt() else 0,
+                    if (et_cell_F4.text.isNotBlank()) et_cell_F4.text.toString().toInt() else 0,
+                    if (et_cell_F5.text.isNotBlank()) et_cell_F5.text.toString().toInt() else 0,
+                    if (et_cell_F6.text.isNotBlank()) et_cell_F6.text.toString().toInt() else 0,
+                    if (et_cell_F7.text.isNotBlank()) et_cell_F7.text.toString().toInt() else 0,
+                    if (et_cell_F8.text.isNotBlank()) et_cell_F8.text.toString().toInt() else 0,
+                    if (et_cell_F9.text.isNotBlank()) et_cell_F9.text.toString().toInt() else 0
                 ),
                 listOf<Int>(
-                    et_cell_G1.text.toString().toInt(),
-                    et_cell_G2.text.toString().toInt(),
-                    et_cell_G3.text.toString().toInt(),
-                    et_cell_G4.text.toString().toInt(),
-                    et_cell_G5.text.toString().toInt(),
-                    et_cell_G6.text.toString().toInt(),
-                    et_cell_G7.text.toString().toInt(),
-                    et_cell_G8.text.toString().toInt(),
-                    et_cell_G9.text.toString().toInt()
+                    if (et_cell_G1.text.isNotBlank()) et_cell_G1.text.toString().toInt() else 0,
+                    if (et_cell_G2.text.isNotBlank()) et_cell_G2.text.toString().toInt() else 0,
+                    if (et_cell_G3.text.isNotBlank()) et_cell_G3.text.toString().toInt() else 0,
+                    if (et_cell_G4.text.isNotBlank()) et_cell_G4.text.toString().toInt() else 0,
+                    if (et_cell_G5.text.isNotBlank()) et_cell_G5.text.toString().toInt() else 0,
+                    if (et_cell_G6.text.isNotBlank()) et_cell_G6.text.toString().toInt() else 0,
+                    if (et_cell_G7.text.isNotBlank()) et_cell_G7.text.toString().toInt() else 0,
+                    if (et_cell_G8.text.isNotBlank()) et_cell_G8.text.toString().toInt() else 0,
+                    if (et_cell_G9.text.isNotBlank()) et_cell_G9.text.toString().toInt() else 0
                 ),
                 listOf<Int>(
-                    et_cell_H1.text.toString().toInt(),
-                    et_cell_H2.text.toString().toInt(),
-                    et_cell_H3.text.toString().toInt(),
-                    et_cell_H4.text.toString().toInt(),
-                    et_cell_H5.text.toString().toInt(),
-                    et_cell_H6.text.toString().toInt(),
-                    et_cell_H7.text.toString().toInt(),
-                    et_cell_H8.text.toString().toInt(),
-                    et_cell_H9.text.toString().toInt()
+                    if (et_cell_H1.text.isNotBlank()) et_cell_H1.text.toString().toInt() else 0,
+                    if (et_cell_H2.text.isNotBlank()) et_cell_H2.text.toString().toInt() else 0,
+                    if (et_cell_H3.text.isNotBlank()) et_cell_H3.text.toString().toInt() else 0,
+                    if (et_cell_H4.text.isNotBlank()) et_cell_H4.text.toString().toInt() else 0,
+                    if (et_cell_H5.text.isNotBlank()) et_cell_H5.text.toString().toInt() else 0,
+                    if (et_cell_H6.text.isNotBlank()) et_cell_H6.text.toString().toInt() else 0,
+                    if (et_cell_H7.text.isNotBlank()) et_cell_H7.text.toString().toInt() else 0,
+                    if (et_cell_H8.text.isNotBlank()) et_cell_H8.text.toString().toInt() else 0,
+                    if (et_cell_H9.text.isNotBlank()) et_cell_H9.text.toString().toInt() else 0
                 ),
                 listOf<Int>(
-                    et_cell_I1.text.toString().toInt(),
-                    et_cell_I2.text.toString().toInt(),
-                    et_cell_I3.text.toString().toInt(),
-                    et_cell_I4.text.toString().toInt(),
-                    et_cell_I5.text.toString().toInt(),
-                    et_cell_I6.text.toString().toInt(),
-                    et_cell_I7.text.toString().toInt(),
-                    et_cell_I8.text.toString().toInt(),
-                    et_cell_I9.text.toString().toInt()
+                    if (et_cell_I1.text.isNotBlank()) et_cell_I1.text.toString().toInt() else 0,
+                    if (et_cell_I2.text.isNotBlank()) et_cell_I2.text.toString().toInt() else 0,
+                    if (et_cell_I3.text.isNotBlank()) et_cell_I3.text.toString().toInt() else 0,
+                    if (et_cell_I4.text.isNotBlank()) et_cell_I4.text.toString().toInt() else 0,
+                    if (et_cell_I5.text.isNotBlank()) et_cell_I5.text.toString().toInt() else 0,
+                    if (et_cell_I6.text.isNotBlank()) et_cell_I6.text.toString().toInt() else 0,
+                    if (et_cell_I7.text.isNotBlank()) et_cell_I7.text.toString().toInt() else 0,
+                    if (et_cell_I8.text.isNotBlank()) et_cell_I8.text.toString().toInt() else 0,
+                    if (et_cell_I9.text.isNotBlank()) et_cell_I9.text.toString().toInt() else 0
                 )
-            )*/
-            //print(puzzle)
-            //val board = Board(puzzle)
-            //print(board)
-            /*val a = listOf<List<Int>>(
-                    listOf<Int>(
-                        et_cell_I1.text.toString().toInt(),
-                        et_cell_I2.text.toString().toInt(),
-                        et_cell_I3.text.toString().toInt(),
-                        et_cell_I4.text.toString().toInt(),
-                        et_cell_I5.text.toString().toInt(),
-                        et_cell_I6.text.toString().toInt(),
-                        et_cell_I7.text.toString().toInt(),
-                        et_cell_I8.text.toString().toInt(),
-                        et_cell_I9.text.toString().toInt()
-                    ),
-                    listOf<Int>(
-                        et_cell_I1.text.toString().toInt(),
-                        et_cell_I2.text.toString().toInt(),
-                        et_cell_I3.text.toString().toInt(),
-                        et_cell_I4.text.toString().toInt(),
-                        et_cell_I5.text.toString().toInt(),
-                        et_cell_I6.text.toString().toInt(),
-                        et_cell_I7.text.toString().toInt(),
-                        et_cell_I8.text.toString().toInt(),
-                        et_cell_I9.text.toString().toInt()
-                    ),
-                )*/
-            println(et_cell_I9.text.isBlank())
-
-            /*GlobalScope.launch(Dispatchers.IO) {
+            )
+            val board = Board(puzzle)
+            Log.e("[POST][SOLVE]", "board = $board")
+            GlobalScope.launch(Dispatchers.Main) {
+                pbSolve.isVisible = true
                 val response = try {
                     RetrofitInstance.api.postBoard(board)
                 } catch (e: IOException) {
@@ -372,11 +329,200 @@ class SolveActivity : AppCompatActivity() {
                     Log.e("[POST][SOLVE]", "Exception: ${e.message}")
                     return@launch
                 }
-
+                finally {
+                    pbSolve.isVisible = false
+                }
                 Log.e("[POST][SOLVE][response]", "response: $response \nresponse body: ${response.body()}")
-                println(response)
-                println(response.body())
-            }*/
+
+
+                if (response.isSuccessful && response.body() != null && response.body()!!.error.isEmpty()){
+                    val solvedPuzzle = response.body()!!.solved_puzzle
+                    et_cell_A1.setText(solvedPuzzle[0][0].toString())
+                    et_cell_A2.setText(solvedPuzzle[0][1].toString())
+                    et_cell_A3.setText(solvedPuzzle[0][2].toString())
+                    et_cell_A4.setText(solvedPuzzle[0][3].toString())
+                    et_cell_A5.setText(solvedPuzzle[0][4].toString())
+                    et_cell_A6.setText(solvedPuzzle[0][5].toString())
+                    et_cell_A7.setText(solvedPuzzle[0][6].toString())
+                    et_cell_A8.setText(solvedPuzzle[0][7].toString())
+                    et_cell_A9.setText(solvedPuzzle[0][8].toString())
+
+                    et_cell_B1.setText(solvedPuzzle[1][0].toString())
+                    et_cell_B2.setText(solvedPuzzle[1][1].toString())
+                    et_cell_B3.setText(solvedPuzzle[1][2].toString())
+                    et_cell_B4.setText(solvedPuzzle[1][3].toString())
+                    et_cell_B5.setText(solvedPuzzle[1][4].toString())
+                    et_cell_B6.setText(solvedPuzzle[1][5].toString())
+                    et_cell_B7.setText(solvedPuzzle[1][6].toString())
+                    et_cell_B8.setText(solvedPuzzle[1][7].toString())
+                    et_cell_B9.setText(solvedPuzzle[1][8].toString())
+
+                    et_cell_C1.setText(solvedPuzzle[2][0].toString())
+                    et_cell_C2.setText(solvedPuzzle[2][1].toString())
+                    et_cell_C3.setText(solvedPuzzle[2][2].toString())
+                    et_cell_C4.setText(solvedPuzzle[2][3].toString())
+                    et_cell_C5.setText(solvedPuzzle[2][4].toString())
+                    et_cell_C6.setText(solvedPuzzle[2][5].toString())
+                    et_cell_C7.setText(solvedPuzzle[2][6].toString())
+                    et_cell_C8.setText(solvedPuzzle[2][7].toString())
+                    et_cell_C9.setText(solvedPuzzle[2][8].toString())
+
+                    et_cell_D1.setText(solvedPuzzle[3][0].toString())
+                    et_cell_D2.setText(solvedPuzzle[3][1].toString())
+                    et_cell_D3.setText(solvedPuzzle[3][2].toString())
+                    et_cell_D4.setText(solvedPuzzle[3][3].toString())
+                    et_cell_D5.setText(solvedPuzzle[3][4].toString())
+                    et_cell_D6.setText(solvedPuzzle[3][5].toString())
+                    et_cell_D7.setText(solvedPuzzle[3][6].toString())
+                    et_cell_D8.setText(solvedPuzzle[3][7].toString())
+                    et_cell_D9.setText(solvedPuzzle[3][8].toString())
+
+                    et_cell_E1.setText(solvedPuzzle[4][0].toString())
+                    et_cell_E2.setText(solvedPuzzle[4][1].toString())
+                    et_cell_E3.setText(solvedPuzzle[4][2].toString())
+                    et_cell_E4.setText(solvedPuzzle[4][3].toString())
+                    et_cell_E5.setText(solvedPuzzle[4][4].toString())
+                    et_cell_E6.setText(solvedPuzzle[4][5].toString())
+                    et_cell_E7.setText(solvedPuzzle[4][6].toString())
+                    et_cell_E8.setText(solvedPuzzle[4][7].toString())
+                    et_cell_E9.setText(solvedPuzzle[4][8].toString())
+
+                    et_cell_F1.setText(solvedPuzzle[5][0].toString())
+                    et_cell_F2.setText(solvedPuzzle[5][1].toString())
+                    et_cell_F3.setText(solvedPuzzle[5][2].toString())
+                    et_cell_F4.setText(solvedPuzzle[5][3].toString())
+                    et_cell_F5.setText(solvedPuzzle[5][4].toString())
+                    et_cell_F6.setText(solvedPuzzle[5][5].toString())
+                    et_cell_F7.setText(solvedPuzzle[5][6].toString())
+                    et_cell_F8.setText(solvedPuzzle[5][7].toString())
+                    et_cell_F9.setText(solvedPuzzle[5][8].toString())
+
+                    et_cell_G1.setText(solvedPuzzle[6][0].toString())
+                    et_cell_G2.setText(solvedPuzzle[6][1].toString())
+                    et_cell_G3.setText(solvedPuzzle[6][2].toString())
+                    et_cell_G4.setText(solvedPuzzle[6][3].toString())
+                    et_cell_G5.setText(solvedPuzzle[6][4].toString())
+                    et_cell_G6.setText(solvedPuzzle[6][5].toString())
+                    et_cell_G7.setText(solvedPuzzle[6][6].toString())
+                    et_cell_G8.setText(solvedPuzzle[6][7].toString())
+                    et_cell_G9.setText(solvedPuzzle[6][8].toString())
+
+                    et_cell_H1.setText(solvedPuzzle[7][0].toString())
+                    et_cell_H2.setText(solvedPuzzle[7][1].toString())
+                    et_cell_H3.setText(solvedPuzzle[7][2].toString())
+                    et_cell_H4.setText(solvedPuzzle[7][3].toString())
+                    et_cell_H5.setText(solvedPuzzle[7][4].toString())
+                    et_cell_H6.setText(solvedPuzzle[7][5].toString())
+                    et_cell_H7.setText(solvedPuzzle[7][6].toString())
+                    et_cell_H8.setText(solvedPuzzle[7][7].toString())
+                    et_cell_H9.setText(solvedPuzzle[7][8].toString())
+
+                    et_cell_I1.setText(solvedPuzzle[8][0].toString())
+                    et_cell_I2.setText(solvedPuzzle[8][1].toString())
+                    et_cell_I3.setText(solvedPuzzle[8][2].toString())
+                    et_cell_I4.setText(solvedPuzzle[8][3].toString())
+                    et_cell_I5.setText(solvedPuzzle[8][4].toString())
+                    et_cell_I6.setText(solvedPuzzle[8][5].toString())
+                    et_cell_I7.setText(solvedPuzzle[8][6].toString())
+                    et_cell_I8.setText(solvedPuzzle[8][7].toString())
+                    et_cell_I9.setText(solvedPuzzle[8][8].toString())
+                }
+                else {
+                    Toast.makeText(applicationContext, response.body()!!.error, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
+        btnClear.setOnClickListener {
+            et_cell_A1.setText("")
+            et_cell_A2.setText("")
+            et_cell_A3.setText("")
+            et_cell_A4.setText("")
+            et_cell_A5.setText("")
+            et_cell_A6.setText("")
+            et_cell_A7.setText("")
+            et_cell_A8.setText("")
+            et_cell_A9.setText("")
+
+            et_cell_B1.setText("")
+            et_cell_B2.setText("")
+            et_cell_B3.setText("")
+            et_cell_B4.setText("")
+            et_cell_B5.setText("")
+            et_cell_B6.setText("")
+            et_cell_B7.setText("")
+            et_cell_B8.setText("")
+            et_cell_B9.setText("")
+
+            et_cell_C1.setText("")
+            et_cell_C2.setText("")
+            et_cell_C3.setText("")
+            et_cell_C4.setText("")
+            et_cell_C5.setText("")
+            et_cell_C6.setText("")
+            et_cell_C7.setText("")
+            et_cell_C8.setText("")
+            et_cell_C9.setText("")
+
+            et_cell_D1.setText("")
+            et_cell_D2.setText("")
+            et_cell_D3.setText("")
+            et_cell_D4.setText("")
+            et_cell_D5.setText("")
+            et_cell_D6.setText("")
+            et_cell_D7.setText("")
+            et_cell_D8.setText("")
+            et_cell_D9.setText("")
+
+            et_cell_E1.setText("")
+            et_cell_E2.setText("")
+            et_cell_E3.setText("")
+            et_cell_E4.setText("")
+            et_cell_E5.setText("")
+            et_cell_E6.setText("")
+            et_cell_E7.setText("")
+            et_cell_E8.setText("")
+            et_cell_E9.setText("")
+
+            et_cell_F1.setText("")
+            et_cell_F2.setText("")
+            et_cell_F3.setText("")
+            et_cell_F4.setText("")
+            et_cell_F5.setText("")
+            et_cell_F6.setText("")
+            et_cell_F7.setText("")
+            et_cell_F8.setText("")
+            et_cell_F9.setText("")
+
+            et_cell_G1.setText("")
+            et_cell_G2.setText("")
+            et_cell_G3.setText("")
+            et_cell_G4.setText("")
+            et_cell_G5.setText("")
+            et_cell_G6.setText("")
+            et_cell_G7.setText("")
+            et_cell_G8.setText("")
+            et_cell_G9.setText("")
+
+            et_cell_H1.setText("")
+            et_cell_H2.setText("")
+            et_cell_H3.setText("")
+            et_cell_H4.setText("")
+            et_cell_H5.setText("")
+            et_cell_H6.setText("")
+            et_cell_H7.setText("")
+            et_cell_H8.setText("")
+            et_cell_H9.setText("")
+
+            et_cell_I1.setText("")
+            et_cell_I2.setText("")
+            et_cell_I3.setText("")
+            et_cell_I4.setText("")
+            et_cell_I5.setText("")
+            et_cell_I6.setText("")
+            et_cell_I7.setText("")
+            et_cell_I8.setText("")
+            et_cell_I9.setText("")
         }
     }
 }
