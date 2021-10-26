@@ -19,21 +19,25 @@ import java.io.IOException
 import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var tvResponse: TextView
     private lateinit var btnGoToSolveActivity: Button
-    private lateinit var btnPost: Button
+    private lateinit var btnGoToOCRView: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        tvResponse = findViewById(R.id.tvResponse)
         btnGoToSolveActivity = findViewById(R.id.btnGoToSolveActivity)
-        btnPost = findViewById(R.id.btnPost)
+        btnGoToOCRView = findViewById(R.id.btnGoToOCRView)
 
 
         btnGoToSolveActivity.setOnClickListener {
             Intent(this, SolveActivity::class.java).also {
+                startActivity(it)
+            }
+        }
+
+        btnGoToOCRView.setOnClickListener {
+            Intent(this, OcrActivity::class.java).also {
                 startActivity(it)
             }
         }
