@@ -15,7 +15,7 @@ object RetrofitInstance {
     val api: SudokuApi by lazy {
         Retrofit.Builder()
             .client(client)
-            .baseUrl("http://10.0.2.2:8080/")
+            .baseUrl("http://192.168.0.24:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(SudokuApi::class.java)
